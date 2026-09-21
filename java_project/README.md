@@ -72,17 +72,40 @@ CREATE DATABASE expense_manager;
 ```
 > The application auto-creates all tables on first run.
 
-### Step 3 — Add MySQL JDBC Driver
-1. Download `mysql-connector-java-8.x.x.jar`
-2. Create a `lib/` folder inside `java_project/`
-3. Place the `.jar` file inside `lib/`
+### Step 3 — MySQL JDBC Driver
+The driver (`lib/mysql-connector-java.jar`) is already included in this repo — no download needed.
+If the `lib/` folder is empty, download `mysql-connector-j-8.x.x.jar` from
+https://dev.mysql.com/downloads/connector/j/, extract it, and place it in `lib/` as `mysql-connector-java.jar`.
 
-### Step 4 — Configure Database Password
-Open `src/db/DatabaseConnection.java` and change:
-```java
-private static final String PASSWORD = "your_password"; // ← Change this
+### Step 4 — Configure Database Connection (no code change needed)
+The app reads these environment variables, falling back to the defaults shown:
+
+| Variable | Default | Meaning |
+|----------|---------|---------|
+| `DB_HOST` | `localhost` | MySQL host |
+| `DB_PORT` | `3307` | MySQL port (`3306` for a standard install) |
+| `DB_NAME` | `expense_manager` | Database name |
+| `DB_USER` | `root` | MySQL username |
+| `DB_PASSWORD` | *(empty)* | MySQL password |
+
+**Standard MySQL install (port 3306 with a root password)** — set these before running:
+
+Windows (PowerShell):
+```powershell
+$env:DB_PORT = "3306"
+$env:DB_PASSWORD = "your_mysql_root_password"
+.\compile_and_run.bat
 ```
-Also update `USERNAME` if it's not `root`.
+
+Linux / macOS:
+```bash
+export DB_PORT=3306
+export DB_PASSWORD=your_mysql_root_password
+./compile_and_run.sh
+```
+
+> To make them permanent on Windows, use `setx DB_PORT 3306` and `setx DB_PASSWORD your_password`,
+> then reopen the terminal.
 
 ### Step 5 — Compile & Run
 
@@ -100,11 +123,11 @@ chmod +x compile_and_run.sh
 **Manual compile (any OS):**
 ```bash
 # Windows
-javac -cp ".;lib/mysql-connector-java.jar" -d out src/model/*.java src/utils/*.java src/db/*.java src/ui/*.java src/Main.java
+javac -encoding UTF-8 -cp ".;lib/mysql-connector-java.jar" -d out src/model/*.java src/utils/*.java src/db/*.java src/ui/*.java src/Main.java
 java  -cp "out;lib/mysql-connector-java.jar" Main
 
 # Linux/macOS (use : instead of ;)
-javac -cp ".:lib/mysql-connector-java.jar" -d out src/model/*.java src/utils/*.java src/db/*.java src/ui/*.java src/Main.java
+javac -encoding UTF-8 -cp ".:lib/mysql-connector-java.jar" -d out src/model/*.java src/utils/*.java src/db/*.java src/ui/*.java src/Main.java
 java  -cp "out:lib/mysql-connector-java.jar" Main
 ```
 

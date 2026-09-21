@@ -1,0 +1,17 @@
+# ── Build output ──
+java_project/out/
+
+# ── Local MySQL data (machine-specific, never commit) ──
+java_project/mysql-data-3307/
+java_project/mysql-data/
+*.pid
+*.err
+
+# ── Downloaded archives / temp extraction ──
+java_project/lib/*.zip
+java_project/lib/tmp_extract/
+
+# ── IDE / tooling ──
+.metals/
+.vscode/
+*.class

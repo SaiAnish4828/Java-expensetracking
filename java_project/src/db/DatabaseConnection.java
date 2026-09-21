@@ -13,13 +13,22 @@ import java.sql.Statement;
 public class DatabaseConnection {
 
     // ──────────────────────────────────────────────
-    //  ★  CONFIGURE YOUR DATABASE DETAILS HERE  ★
+    //  ★  DATABASE CONFIGURATION  ★
+    //  Defaults work out of the box; override any value
+    //  with an environment variable on another machine
+    //  (no code change needed):
+    //    DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
     // ──────────────────────────────────────────────
-    private static final String HOST     = "localhost";
-    private static final String PORT     = "3307";
-    private static final String DATABASE = "expense_manager";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = ""; // local isolated MySQL on port 3307 (no password)
+    private static final String HOST     = envOrDefault("DB_HOST", "localhost");
+    private static final String PORT     = envOrDefault("DB_PORT", "3307");
+    private static final String DATABASE = envOrDefault("DB_NAME", "expense_manager");
+    private static final String USERNAME = envOrDefault("DB_USER", "root");
+    private static final String PASSWORD = envOrDefault("DB_PASSWORD", ""); // empty = no password
+
+    private static String envOrDefault(String key, String fallback) {
+        String val = System.getenv(key);
+        return (val != null && !val.isEmpty()) ? val : fallback;
+    }
 
     private static final String URL =
             "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE
@@ -41,7 +50,8 @@ public class DatabaseConnection {
             throw new RuntimeException("MySQL Driver not found. Add mysql-connector-java.jar to classpath.", e);
         } catch (SQLException e) {
             System.err.println("[DB] Connection failed: " + e.getMessage());
-            throw new RuntimeException("Database connection failed. Check credentials in DatabaseConnection.java", e);
+            throw new RuntimeException("Database connection failed. Check that MySQL is running, "
+                + "database '" + DATABASE + "' exists, and DB_HOST/DB_PORT/DB_USER/DB_PASSWORD are correct.", e);
         }
     }
 

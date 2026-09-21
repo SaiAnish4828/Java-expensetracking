@@ -43,9 +43,10 @@ public class Main {
                     "Failed to connect to the database.\n\n" +
                     "Please check:\n" +
                     "  • MySQL is running\n" +
-                    "  • Database 'expense_manager' exists\n" +
-                    "  • Password is correct in DatabaseConnection.java\n" +
-                    "  • mysql-connector-java.jar is in the classpath\n\n" +
+                    "  • Database 'expense_manager' exists (CREATE DATABASE expense_manager;)\n" +
+                    "  • DB_HOST / DB_PORT / DB_USER / DB_PASSWORD are correct\n" +
+                    "    (defaults: localhost:3307, user root, empty password)\n" +
+                    "  • mysql-connector-java.jar is in java_project/lib/\n\n" +
                     "Error: " + e.getMessage(),
                     "Startup Error", JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
