@@ -65,12 +65,16 @@ java_project/
 - **MySQL Server 8.0+** → https://dev.mysql.com/downloads/mysql/
 - **MySQL Connector/J** (JDBC Driver) → https://dev.mysql.com/downloads/connector/j/
 
-### Step 2 — Create the Database
-Open MySQL command line or MySQL Workbench and run:
+### Step 2 — Database (auto-created, usually nothing to do)
+The application creates the `expense_manager` database, all tables, and the 9 default
+categories automatically on first run. If you prefer to create it manually:
 ```sql
 CREATE DATABASE expense_manager;
 ```
-> The application auto-creates all tables on first run.
+
+> Extract this project to a permanent folder (e.g. `Documents` or `Desktop`) before
+> running it — do NOT run it from inside a ZIP file or the `Temp` folder, which
+> Windows can clean up at any time.
 
 ### Step 3 — MySQL JDBC Driver
 The driver (`lib/mysql-connector-java.jar`) is already included in this repo — no download needed.

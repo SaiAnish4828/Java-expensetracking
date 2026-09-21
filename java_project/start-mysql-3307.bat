@@ -11,6 +11,19 @@ if not exist "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqld.exe" (
     exit /b 1
 )
 
+REM First run on this machine: create fresh database files (takes ~30 sec).
+if not exist "mysql-data-3307" (
+    echo First run on this machine: creating database files, please wait...
+    "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqld.exe" --initialize-insecure --datadir="%~dp0mysql-data-3307"
+    if %ERRORLEVEL% NEQ 0 (
+        echo [ERROR] Could not create database files. Read the lines above.
+        pause
+        exit /b 1
+    )
+    echo Database files created.
+    echo.
+)
+
 REM Clear a stale lock left by an unclean shutdown.
 if exist "mysql-data-3307\mysqld-3307.pid" del "mysql-data-3307\mysqld-3307.pid"
 

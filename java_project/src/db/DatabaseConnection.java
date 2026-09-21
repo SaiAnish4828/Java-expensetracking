@@ -42,6 +42,7 @@ public class DatabaseConnection {
     private DatabaseConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+            ensureDatabaseExists();
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             System.out.println("[DB] Connected to MySQL successfully.");
             initializeTables();
@@ -73,6 +74,24 @@ public class DatabaseConnection {
             System.err.println("[DB] Reconnection failed: " + e.getMessage());
         }
         return connection;
+    }
+
+    /**
+     * Creates the database itself if it doesn't exist yet.
+     * Needed on fresh machines where only the MySQL server is installed.
+     * Tables are created separately in initializeTables().
+     */
+    private void ensureDatabaseExists() {
+        String serverUrl = "jdbc:mysql://" + HOST + ":" + PORT
+                + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+        try (Connection adminCon = DriverManager.getConnection(serverUrl, USERNAME, PASSWORD);
+             Statement stmt = adminCon.createStatement()) {
+            stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS `" + DATABASE + "`");
+            System.out.println("[DB] Database '" + DATABASE + "' is ready.");
+        } catch (SQLException e) {
+            // Not fatal here — the connect below will surface the real problem.
+            System.err.println("[DB] Could not ensure database exists: " + e.getMessage());
+        }
     }
 
     /**
